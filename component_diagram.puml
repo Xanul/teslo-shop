@@ -1,0 +1,206 @@
+@startuml Teslo Shop Component Diagram
+!theme plain
+skinparam componentStyle uml2
+skinparam linetype ortho
+skinparam backgroundColor #FEFEFE
+
+title Teslo Shop - Component Diagram
+
+' ==========================================
+' LAYER: External Libraries & Dependencies
+' ==========================================
+package "External Libraries" {
+    component [React] as React
+    component [Next.js] as NextJS
+    component [Zustand] as Zustand
+    component [Swiper] as Swiper
+    component [react-icons] as ReactIcons
+    component [Tailwind CSS] as TailwindCSS
+}
+
+' ==========================================
+' LAYER: Configuration & Interfaces
+' ==========================================
+package "Configuration & Interfaces" {
+    component [fonts.config] as FontsConfig
+    component [sidebar.config] as SidebarConfig
+    component [product.interface] as ProductInterface
+    component [utils] as Utils
+}
+
+' ==========================================
+' LAYER: State Management
+' ==========================================
+package "State Management" {
+    component [useUIStore\n(Zustand)] as UIStore
+}
+
+' ==========================================
+' LAYER: UI Components (Generic)
+' ==========================================
+package "UI Components" {
+    package "Navigation" {
+        component [TopMenu] as TopMenu
+        component [NavLink] as NavLink
+        component [CartBadge] as CartBadge
+    }
+
+    package "Sidebar" {
+        component [Sidebar] as Sidebar
+        component [SidebarSection] as SidebarSection
+        component [SidebarMenuItem] as SidebarMenuItem
+    }
+
+    package "Common" {
+        component [PageTitle] as PageTitle
+        component [PageNotFound] as PageNotFound
+    }
+}
+
+' ==========================================
+' LAYER: Product Components
+' ==========================================
+package "Product Components" {
+    package "Product List" {
+        component [ProductGrid] as ProductGrid
+        component [ProductGridItem] as ProductGridItem
+    }
+
+    package "Product Detail" {
+        component [ProductSlideshow] as ProductSlideshow
+        component [SizeSelector] as SizeSelector
+        component [QuantitySelector] as QuantitySelector
+    }
+}
+
+' ==========================================
+' DEPENDENCIES - EXTERNAL
+' ==========================================
+
+TopMenu --> React: uses
+TopMenu --> NextJS: uses
+TopMenu --> Zustand: uses
+TopMenu --> ReactIcons: uses
+TopMenu --> TailwindCSS: uses
+
+Sidebar --> React: uses
+Sidebar --> Zustand: uses
+Sidebar --> ReactIcons: uses
+Sidebar --> TailwindCSS: uses
+
+NavLink --> React: uses
+NavLink --> TailwindCSS: uses
+
+CartBadge --> React: uses
+CartBadge --> TailwindCSS: uses
+
+SidebarSection --> React: uses
+SidebarSection --> TailwindCSS: uses
+
+SidebarMenuItem --> React: uses
+SidebarMenuItem --> ReactIcons: uses
+SidebarMenuItem --> TailwindCSS: uses
+
+PageTitle --> React: uses
+PageTitle --> FontsConfig: uses
+PageTitle --> TailwindCSS: uses
+
+PageNotFound --> React: uses
+PageNotFound --> NextJS: uses
+PageNotFound --> TailwindCSS: uses
+
+ProductGrid --> React: uses
+ProductGrid --> TailwindCSS: uses
+
+ProductGridItem --> React: uses
+ProductGridItem --> NextJS: uses
+ProductGridItem --> TailwindCSS: uses
+
+ProductSlideshow --> React: uses
+ProductSlideshow --> Swiper: uses
+ProductSlideshow --> TailwindCSS: uses
+
+SizeSelector --> React: uses
+SizeSelector --> TailwindCSS: uses
+
+QuantitySelector --> React: uses
+QuantitySelector --> ReactIcons: uses
+QuantitySelector --> TailwindCSS: uses
+
+' ==========================================
+' DEPENDENCIES - CONFIGURATION & INTERFACES
+' ==========================================
+
+TopMenu --> SidebarConfig: uses
+Sidebar --> SidebarConfig: uses
+
+ProductGrid --> ProductInterface: uses
+ProductGridItem --> ProductInterface: uses
+ProductSlideshow --> ProductInterface: uses
+SizeSelector --> ProductInterface: uses
+
+PageTitle --> FontsConfig: uses
+
+TopMenu --> Utils: uses
+Sidebar --> Utils: uses
+ProductGridItem --> Utils: uses
+PageTitle --> Utils: uses
+SidebarMenuItem --> Utils: uses
+
+' ==========================================
+' DEPENDENCIES - STATE MANAGEMENT
+' ==========================================
+
+TopMenu --> UIStore: uses
+Sidebar --> UIStore: uses
+
+' ==========================================
+' COMPONENT COMPOSITION - HIERARCHY
+' ==========================================
+
+TopMenu --> NavLink: contains
+TopMenu --> CartBadge: contains
+
+Sidebar --> SidebarSection: contains
+
+SidebarSection --> SidebarMenuItem: contains
+
+ProductGrid --> ProductGridItem: contains
+
+' ==========================================
+' LEGEND
+' ==========================================
+note right of React
+  **Legend:**
+  ━━━━━━━━━━━━━━━━━━
+  **Green**: Client Components
+  **Blue**: Server Components
+  **Orange**: Config/Interfaces
+  **Purple**: External Libraries
+end note
+
+' ==========================================
+' STYLING
+' ==========================================
+
+' Client Components (Green)
+TopMenu --> [TopMenu]: <<ClientComponent>>
+Sidebar --> [Sidebar]: <<ClientComponent>>
+ProductGridItem --> [ProductGridItem]: <<ClientComponent>>
+ProductSlideshow --> [ProductSlideshow]: <<ClientComponent>>
+QuantitySelector --> [QuantitySelector]: <<ClientComponent>>
+
+' Server Components (Blue)
+ProductGrid --> [ProductGrid]: <<ServerComponent>>
+
+skinparam component {
+    BackgroundColor<<ClientComponent>> #90EE90
+    BackgroundColor<<ServerComponent>> #87CEEB
+    BackgroundColor<<Config>> #FFB366
+    BackgroundColor<<External>> #DDA0DD
+    BorderColor #333333
+    FontName "Courier"
+    FontSize 10
+}
+
+@enduml

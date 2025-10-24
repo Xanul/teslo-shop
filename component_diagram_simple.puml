@@ -1,0 +1,70 @@
+@startuml Teslo Shop - Component Diagram (Simplified)
+!theme plain
+skinparam componentStyle uml2
+skinparam linetype ortho
+
+title Teslo Shop - Component Diagram
+
+' ==========================================
+' EXTERNAL LIBRARIES
+' ==========================================
+package "External Libraries" {
+    component [React] as React
+    component [Zustand] as Zustand
+    component [Tailwind CSS] as Tailwind
+}
+
+' ==========================================
+' CORE COMPONENTS
+' ==========================================
+package "Components" {
+    component [TopMenu] as TopMenu
+    component [Sidebar] as Sidebar
+    component [ProductGrid] as ProductGrid
+    component [ProductGridItem] as ProductGridItem
+    component [ProductSlideshow] as ProductSlideshow
+    component [SizeSelector] as SizeSelector
+    component [QuantitySelector] as QuantitySelector
+}
+
+' ==========================================
+' CONFIG & STATE
+' ==========================================
+package "Config & State" {
+    component [useUIStore] as Store
+    component [Interfaces] as Interfaces
+}
+
+' ==========================================
+' RELATIONSHIPS
+' ==========================================
+
+TopMenu --> React: uses
+TopMenu --> Zustand: uses
+TopMenu --> Tailwind: uses
+TopMenu --> Store: uses
+
+Sidebar --> React: uses
+Sidebar --> Zustand: uses
+Sidebar --> Tailwind: uses
+Sidebar --> Store: uses
+
+ProductGrid --> React: uses
+ProductGrid --> Tailwind: uses
+ProductGrid --> ProductGridItem: contains
+
+ProductGridItem --> React: uses
+ProductGridItem --> Tailwind: uses
+ProductGridItem --> Interfaces: uses
+
+ProductSlideshow --> React: uses
+ProductSlideshow --> Tailwind: uses
+ProductSlideshow --> Interfaces: uses
+
+SizeSelector --> React: uses
+SizeSelector --> Interfaces: uses
+
+QuantitySelector --> React: uses
+QuantitySelector --> Tailwind: uses
+
+@enduml

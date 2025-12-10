@@ -1,17 +1,43 @@
 "use client";
 
-import { IoCloseOutline, IoSearchOutline } from "react-icons/io5";
+import {
+  IoCloseOutline,
+  IoLogInOutline,
+  IoLogOutOutline,
+  IoPeopleOutline,
+  IoPersonOutline,
+  IoSearchOutline,
+  IoShirtOutline,
+  IoTicketOutline,
+} from "react-icons/io5";
 import { SidebarSection } from "./SidebarSection";
-import { SIDEBAR_ITEMS } from "@/config/components/sidebar.config";
 import { SidebarMenuItem } from "./SidebarMenuItem";
 import { useUIStore } from "@/store";
 import { cn } from "@/lib/utils";
+import { useSession, signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 export const Sidebar = () => {
-  const userItems = SIDEBAR_ITEMS.filter((item) => item.section === "USER");
-  const adminItems = SIDEBAR_ITEMS.filter((item) => item.section === "ADMIN");
   const { isSideMenuOpen, closeSideMenu } = useUIStore();
-  
+  const { data: session, status } = useSession();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const isAuthenticated = status === "authenticated";
+  const isAdmin = session?.user?.role === "admin";
+
+  const handleLogout = async () => {
+    closeSideMenu();
+    await signOut({
+      callbackUrl: "/",
+    });
+  };
+
+  if (!isMounted) return null;
+
   return (
     <div>
       {/* Black Background */}
@@ -47,27 +73,62 @@ export const Sidebar = () => {
         </div>
         {/* Menu */}
         <SidebarSection title="User">
-          {userItems.map((item) => (
-            <SidebarMenuItem
-              href={item.href}
-              icon={item.icon}
-              label={item.label}
-              key={item.id}
-              onClick={() => console.log("Click")}
-            />
-          ))}
+          {isAuthenticated && (
+            <>
+              <SidebarMenuItem
+                href={"/profile"}
+                icon={IoPersonOutline}
+                label="Profile"
+                onClick={() => closeSideMenu()}
+              />
+              <SidebarMenuItem
+                href={"/orders"}
+                icon={IoTicketOutline}
+                label="My Orders"
+                onClick={() => closeSideMenu()}
+              />
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 px-2 py-2 hover:bg-gray-100 rounded transition-colors duration-200 cursor-pointer2"
+              >
+                <IoLogOutOutline size={24} className="flex-shrink-0" />
+                <span className="text-base font-medium">Logout</span>
+              </button>
+            </>
+          )}
+          {!isAuthenticated && (
+            <>
+              <SidebarMenuItem
+                href={"/auth/login"}
+                icon={IoLogInOutline}
+                label="Login"
+                onClick={() => closeSideMenu()}
+              />
+            </>
+          )}
         </SidebarSection>
-        <SidebarSection title="Admin">
-          {adminItems.map((item) => (
+        {isAdmin && (
+          <SidebarSection title="Admin">
             <SidebarMenuItem
-              href={item.href}
-              icon={item.icon}
-              label={item.label}
-              key={item.id}
-              onClick={() => console.log("Click")}
+              href={"/"}
+              icon={IoShirtOutline}
+              label="Products Managment"
+              onClick={() => closeSideMenu()}
             />
-          ))}
-        </SidebarSection>
+            <SidebarMenuItem
+              href={"/"}
+              icon={IoTicketOutline}
+              label="Orders Managment"
+              onClick={() => closeSideMenu()}
+            />
+            <SidebarMenuItem
+              href={"/"}
+              icon={IoPeopleOutline}
+              label="Users Managment"
+              onClick={() => closeSideMenu()}
+            />
+          </SidebarSection>
+        )}
       </nav>
     </div>
   );

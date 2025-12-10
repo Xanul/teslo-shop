@@ -1,6 +1,10 @@
-import { CheckoutProductItem, PageTitle, PaymentConfirm, OrderSummary } from "@/components";
+import {
+  CheckoutProductItem,
+  PageTitle,
+  PaymentConfirm,
+  OrderSummary,
+} from "@/components";
 import { initialData } from "@/seed/seed";
-import { use } from "react";
 
 interface OrderPageProps {
   params: Promise<{
@@ -14,8 +18,8 @@ const productsInCartMockup = [
   initialData.products[2],
 ];
 
-export default function OrderPage({ params }: OrderPageProps) {
-  const { id } = use(params);
+export default async function OrderPage({ params }: OrderPageProps) {
+  const { id } = await params;
 
   // Todo: Verificar si la orden existe y pertenece al usuario
 
@@ -30,7 +34,7 @@ export default function OrderPage({ params }: OrderPageProps) {
             <PaymentConfirm />
             {productsInCartMockup.map((product) => (
               <CheckoutProductItem
-                product={product}
+                product={{ ...product, id: product.slug }}
                 key={product.slug}
                 quantity={2}
               />

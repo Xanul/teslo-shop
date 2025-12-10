@@ -1,0 +1,5 @@
+export const CART_CONFIG = {
+  SHIPPING_COST: 25,
+  TAX_RATE: 0.16,
+  FREE_SHIPPING_THRESHOLD: 100,
+} as const;

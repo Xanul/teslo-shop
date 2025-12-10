@@ -1,3 +1,4 @@
+import { LinkButton } from "@/components";
 import Link from "next/link";
 import { IoCartOutline } from "react-icons/io5";
 
@@ -19,23 +20,19 @@ export default function EmptyPage() {
 
         {/* Descripción */}
         <p className="text-gray-500 text-base sm:text-lg mb-8">
-          It seems you haven&apos;t added any products yet. Discover our collections and find something you&apos;ll love.
+          It seems you haven&apos;t added any products yet. Discover our
+          collections and find something you&apos;ll love.
         </p>
 
         {/* Botón primario */}
-        <Link
-          href="/"
-          className="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:from-blue-700 hover:to-blue-800 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
+        <LinkButton href="/" size="lg">
           Continue shopping
-        </Link>
+        </LinkButton>
 
         {/* Sugerencia adicional */}
         <p className="text-gray-400 text-sm mt-6">
           Need help?{" "}
-          <span className="text-gray-600 font-medium">
-            Contact us
-          </span>
+          <span className="text-gray-600 font-medium">Contact us</span>
         </p>
       </div>
     </div>

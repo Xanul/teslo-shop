@@ -1,8 +1,17 @@
+import { auth } from "@/config/auth.config";
+import { redirect } from "next/navigation";
 
-const ShopLayout = ({ children }: { children: React.ReactNode }) => {
+const ShopLayout = async({ children }: { children: React.ReactNode }) => {
+ 
+
+  const session = await auth();
+  if (session?.user) redirect("/");
+
   return (
-    <main className="bg-blue-500 min-h-screen">
+    <main className="flex justify-center">
+      <div className="w-full">
       {children}
+      </div>
     </main>
   )
 }

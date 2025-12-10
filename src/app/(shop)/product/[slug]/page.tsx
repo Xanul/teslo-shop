@@ -1,13 +1,9 @@
-"use client";
-import { use } from "react";
-import {
-  QuantitySelector,
-  SizeSelector,
-  ProductSlideshow,
-} from "@/components";
+// export const revalidate = 604800;
+import { ProductSlideshow, StockLabel, AddToCart } from "@/components";
 import { titleFont } from "@/config/fonts";
-import { initialData } from "@/seed/seed";
 import { notFound } from "next/navigation";
+import { getProductBySlug } from "@/actions";
+import { Metadata, ResolvingMetadata } from "next";
 
 interface ProductPageProps {
   params: Promise<{
@@ -15,9 +11,28 @@ interface ProductPageProps {
   }>;
 }
 
-export default function ProductPage({ params }: ProductPageProps) {
-  const { slug } = use(params);
-  const product = initialData.products.find((product) => product.slug === slug);
+export async function generateMetadata(
+  {params}: ProductPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+
+  return {
+    title: product?.title ?? "Product not found",
+    description: product?.description ?? "Product not found",
+    openGraph: {
+      title: product?.title ?? "Product not found",
+      description: product?.description ?? "Product not found",
+      images: [`/products/${product?.images[1] ?? ""}`]
+    }
+  }
+
+}
+
+export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
@@ -32,20 +47,14 @@ export default function ProductPage({ params }: ProductPageProps) {
       </div>
       {/* Product Info */}
       <div className="col-span-1 px-5">
+        {/* Stock label */}
+        <StockLabel slug={slug}/>
+        {/* Product title */}
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
           {product.title}
         </h1>
         <p className="text-lg md:mb-5">$ {product.price}</p>
-        {/* Size selector */}
-        <SizeSelector
-          availableSizes={product.sizes}
-          selectedSize={product.sizes[0]}
-        />
-        {/* Quantity selector */}
-        <QuantitySelector quantity={2} />
-
-        {/* Button */}
-        <button className="btn-primary my-2 md:my-5">Add to Cart</button>
+        <AddToCart product={product} />
         {/* Description */}
         <h3 className="font-bold text-sm">Description</h3>
         <p className="font-light text-justify">{product.description}</p>

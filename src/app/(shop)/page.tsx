@@ -1,10 +1,25 @@
-import { PageTitle, ProductGrid } from "@/components";
-import { initialData } from "@/seed/seed";
+export const revalidate = 60;
 
-const products = initialData.products;
+import { getPaginatedProductsWithImages } from "@/actions";
+import { PageTitle, Pagination, ProductGrid } from "@/components";
+import { redirect } from "next/navigation";
+
+interface ShopePageProps {
+  searchParams: Promise<{
+    page?: string;
+  }>
+}
+
+export default async function ShopPage({searchParams}: ShopePageProps) {
+  
+  const props = await searchParams;
+  const page = props.page ? parseInt(props.page) : 1;
+
+  const { products, totalPages } = await getPaginatedProductsWithImages({page, take: 12});
+  
+  if ( products.length === 0 && page > 1 ) redirect('/');
 
 
-export default function ShopPage() {
   return (
     <>
       <PageTitle 
@@ -15,6 +30,7 @@ export default function ShopPage() {
       <ProductGrid
         products={products}
       />
+      <Pagination totalPages={totalPages}/>
     </>
   );
 }

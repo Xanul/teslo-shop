@@ -4,11 +4,11 @@ import { initialData } from "@/seed/seed";
 import Link from "next/link";
 
 const productsInCartMockup = [
-  initialData.products[0],
-  initialData.products[1],
-  initialData.products[2],
-  initialData.products[3],
-  initialData.products[4],
+  { ...initialData.products[0], id: '1' },
+  { ...initialData.products[1], id: '2' },
+  { ...initialData.products[2], id: '3' },
+  { ...initialData.products[3], id: '4' },
+  { ...initialData.products[4], id: '5' },
 ];
 
 export default function CheckoutPage() {

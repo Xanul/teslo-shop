@@ -4,10 +4,22 @@ import Link from "next/link";
 import { IoCartOutline, IoSearchOutline } from "react-icons/io5";
 import { NavLink } from "./NavLink";
 import { CartBadge } from "./CartBadge";
-import { useUIStore } from "@/store";
+import { useCartStore, useUIStore } from "@/store";
+import { useEffect, useState } from "react";
 
 export const TopMenu = () => {
+  const totalItems = useCartStore((state) => state.getTotalItems())
   const { openSideMenu } = useUIStore();
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []) 
+
+  const hasItems = isMounted && totalItems > 0;
+  const cartHref = hasItems ? "/cart" : "/empty";
+
   return (
     // Top Menu
     <nav className="sticky top-0 z-50 flex px-5 justify-between items-center w-full h-16 border-b border-gray-200 bg-white">
@@ -31,9 +43,14 @@ export const TopMenu = () => {
         <Link href="/search">
           <IoSearchOutline className="w-5 h-5" />
         </Link>
-        <Link href="/cart">
+
+        <Link href={cartHref}>
           <div className="relative">
-            <CartBadge count={100} />
+            {
+              (isMounted && totalItems > 0) && (
+                <CartBadge count={totalItems} />
+              ) 
+            }
             <IoCartOutline className="w-5 h-5" />
           </div>
         </Link>

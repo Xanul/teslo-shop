@@ -1,10 +1,9 @@
 "use client";
-import { useState } from "react";
 import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 
 interface QuantitySelectorProps {
   quantity: number;
-  onQuantityChange?: (newQuantity: number) => void;
+  onQuantityChange: (newQuantity: number) => void;
   maxQuantity?: number;
   minQuantity?: number;
 }
@@ -15,19 +14,17 @@ export const QuantitySelector = ({
   maxQuantity = 5,
   minQuantity = 1,
 }: QuantitySelectorProps) => {
-  const [count, setCount] = useState<number>(quantity);
-
+  
   const handleQuantityChange = (value: number) => {
-    const newCount = count + value;
+    const newCount = quantity + value;
 
     if (newCount < minQuantity || newCount > maxQuantity) return;
 
-    setCount(newCount);
-    onQuantityChange?.(newCount);
+    onQuantityChange(newCount);
   };
 
-  const isMinReached = count <= minQuantity;
-  const isMaxReached = count >= maxQuantity;
+  const isMinReached = quantity <= minQuantity;
+  const isMaxReached = quantity >= maxQuantity;
 
   return (
     <div className="flex items-center gap-4 bg-gray-50 rounded-xl p-3 w-fit">
@@ -44,7 +41,7 @@ export const QuantitySelector = ({
       </button>
 
       <div className="text-center min-w-12">
-        <span className="text-xl font-medium text-gray-800 block">{count}</span>
+        <span className="text-xl font-medium text-gray-800 block">{quantity}</span>
       </div>
 
       <button

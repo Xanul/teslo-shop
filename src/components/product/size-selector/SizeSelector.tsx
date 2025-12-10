@@ -1,20 +1,18 @@
-
+"use client";
 import { Size } from "@/interfaces";
 import { cn } from "@/lib/utils";
 
 interface SizeSelectorProps {
-  selectedSize: Size;
+  selectedSize?: Size;
   availableSizes: Size[];
+  onSizeChange: (size: Size) => void;
 }
-
 
 export const SizeSelector = ({
   selectedSize,
   availableSizes,
+  onSizeChange,
 }: SizeSelectorProps) => {
-
-  
-
   return (
     <div className="py-1 md:py-5">
       <h3 className="font-semibold text-sm uppercase tracking-widest text-gray-700 mb-4">
@@ -30,7 +28,7 @@ export const SizeSelector = ({
                 ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-600/30 scale-105"
                 : "bg-white text-gray-700 border-gray-200 hover:border-gray-400 hover:shadow-md hover:scale-105"
             )}
-            onClick={() => console.log(size)}
+            onClick={() => onSizeChange(size)}
           >
             {size}
           </button>

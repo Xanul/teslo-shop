@@ -32,5 +32,7 @@ export * from "./profile/addresses/AddressCard";
 export * from "./profile/AddressList";
 export * from "./ui/button/Button";
 export * from "./ui/link/LinkButton";
+export * from "./checkout/ProductsInCheckout";
+
 
 

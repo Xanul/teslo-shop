@@ -1,9 +1,9 @@
 // src/components/checkout/CheckoutProductItem.tsx
-import { Product } from "@/interfaces";
+import { CartProduct } from "@/interfaces";
 import Image from "next/image";
 
 interface CheckoutProductItemProps {
-  product: Product;
+  product: CartProduct;
   quantity?: number;
 }
 
@@ -19,7 +19,7 @@ export const CheckoutProductItem = ({
       <figure className="flex-shrink-0 flex items-center">
         <Image
           alt={product.title}
-          src={`/products/${product.images[0]}`}
+          src={`/products/${product.image}`}
           width={120}
           height={120}
           className="w-18 h-18 object-cover rounded"
@@ -32,7 +32,7 @@ export const CheckoutProductItem = ({
           {product.title}
         </h3>
         <p className="text-sm text-gray-700">
-          Black, <span className="font-semibold">{product.sizes[0]}</span>
+          Black, <span className="font-semibold">{product.size}</span>
         </p>
         <p className="text-sm text-gray-700">
           Quantity: <span className="font-semibold">{quantity}</span>

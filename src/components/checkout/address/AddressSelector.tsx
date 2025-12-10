@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { UserAddress } from "@/interfaces";
 import { LinkButton, Button } from "@/components";
 import { MdOutlineArrowForward } from "react-icons/md";
+import { useAddressStore } from "@/store/address/address-store";
 
 interface AddressSelectorProps {
   addresses: UserAddress[];
@@ -18,6 +19,14 @@ export const AddressSelector = ({ addresses }: AddressSelectorProps) => {
   const [selectedAddress, setSelectedAddress] = useState<UserAddress | null>(
     null
   );
+
+  // Funcion para guardar el ID de la direccion seleccionada en el store y en localStorage
+  const setSelectedAddressId = useAddressStore(
+    (state) => state.setSelectedAddressId
+  );
+
+  // Funcion para guardar la direccion completa en el store
+  const setAddress = useAddressStore((state) => state.setAddress);
 
   const sortedAddresses = useMemo(() => {
     return [...addresses].sort((a, b) => {
@@ -37,7 +46,13 @@ export const AddressSelector = ({ addresses }: AddressSelectorProps) => {
 
   const onNext = () => {
     if (!selectedAddress) return;
-    // Here you would typically save the selected address to the order context/state
+
+    // Guarda el ID de la direccion seleccionada en el store y en localStorage
+    setSelectedAddressId(selectedAddress.id);
+
+    // Guarda toda la direccion en el store
+    setAddress(selectedAddress);
+
     router.push("/checkout");
   };
 

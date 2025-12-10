@@ -1,15 +1,6 @@
-import { CheckoutProductItem, PageTitle } from "@/components";
+import { PageTitle, ProductsInCheckout } from "@/components";
 import { CheckoutSummary } from "@/components/checkout/CheckoutSummary";
-import { initialData } from "@/seed/seed";
 import Link from "next/link";
-
-const productsInCartMockup = [
-  { ...initialData.products[0], id: '1' },
-  { ...initialData.products[1], id: '2' },
-  { ...initialData.products[2], id: '3' },
-  { ...initialData.products[3], id: '4' },
-  { ...initialData.products[4], id: '5' },
-];
 
 export default function CheckoutPage() {
   return (
@@ -20,14 +11,10 @@ export default function CheckoutPage() {
         <Link href={"/"}>
           <span className="text-xl">Add more items</span>
         </Link>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {/* Cart */}
-          <div className="flex flex-col gap-3">
-            {productsInCartMockup.map((product) => (
-              <CheckoutProductItem product={product} key={product.slug} quantity={2} />
-            ))}
-          </div>
+          <ProductsInCheckout />
           {/* Order Summary */}
           <CheckoutSummary />
         </div>

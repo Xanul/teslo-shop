@@ -1,11 +1,27 @@
+"use client";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { useAddressStore, useCartStore } from "@/store";
+import { currencyFormatter } from "@/utils";
+import { useEffect, useState } from "react";
+import { useShallow } from "zustand/shallow";
 
 interface CheckoutSummaryProps {
   className?: string;
 }
 
 export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
+  const [isMounted, setIsMounted] = useState(false);
+  const address = useAddressStore((state) => state.address);
+  const { totalItems, subTotal, tax, shipping, totalPrice } = useCartStore(
+    useShallow((state) => state.getSummaryInformation())
+  );
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
+
   return (
     <div
       className={cn(
@@ -15,12 +31,15 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
     >
       <h3 className="text-xl font-semibold text-gray-900 mb-3">Address</h3>
       <div className="flex flex-col mb-3">
-        <span>John Doe</span>
-        <span>123 Main St</span>
-        <span>Anytown, USA</span>
-        <span>12345</span>
-        <span>USA</span>
-        <span>1234567890</span>
+        <span>
+          {address.firstName} {address.lastName}
+        </span>
+        <span>{address.address}</span>
+        <span>
+          {address.city}, {address.state}, {address.country.name}
+        </span>
+        <span>{address.postalCode}</span>
+        <span>{address.phone}</span>
       </div>
 
       <h3 className="text-xl font-semibold text-gray-900 mb-3 pt-3 border-t border-gray-300">
@@ -29,24 +48,26 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
       <div className="flex flex-col">
         <div className="flex justify-between items-center">
           <p>No. of products:</p>
-          <span>3</span>
+          <span>{totalItems}</span>
         </div>
         <div className="flex justify-between items-center">
           <p>Subtotal:</p>
-          <span>$100</span>
+          <span>{currencyFormatter(subTotal)}</span>
         </div>
         <div className="flex justify-between items-center">
           <p>Shipping:</p>
-          <span>$10</span>
+          <span>{currencyFormatter(shipping)}</span>
         </div>
         <div className="flex justify-between items-center">
           <p>Tax:</p>
-          <span>$10</span>
+          <span>{currencyFormatter(tax)}</span>
         </div>
       </div>
       <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-300">
         <p className="text-xl font-semibold text-gray-900">Total:</p>
-        <span className="text-xl font-semibold text-gray-900">$120</span>
+        <span className="text-xl font-semibold text-gray-900">
+          {currencyFormatter(totalPrice)}
+        </span>
       </div>
       <div className="mt-2">
         <p className="text-xs">
@@ -61,12 +82,12 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
         </p>
       </div>
       <div className="mt-5">
-        <Link
-          href="/orders/1234"
+        <button
+          // href="/orders/1234"
           className="btn-primary w-full text-center block"
         >
           Place Order
-        </Link>
+        </button>
       </div>
     </div>
   );

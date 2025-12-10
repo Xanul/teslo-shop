@@ -1,28 +1,48 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { UserAddressInput } from "@/interfaces";
+import { UserAddress } from "@/interfaces";
 
 interface AddressState {
-  address: UserAddressInput;
-  setAddress: (address: UserAddressInput) => void;
+  address: UserAddress;
+  setAddress: (address: UserAddress) => void;
+  selectedAddressId: string | null;
+  setSelectedAddressId: (id: string | null) => void;
+  clearSelectedAddressId: () => void;
 }
 
 export const useAddressStore = create<AddressState>()(
   persist(
     (set, get) => ({
       address: {
-        firstName: "",
-        lastName: "",
         address: "",
         address2: "",
-        postalCode: "",
+        alias: "",
         city: "",
-        country: "",
+        country: {
+          id: "",
+          name: "",
+        },
+        countryId: "",
+        firstName: "",
+        id: "",
+        isDefault: false,
+        lastName: "",
         phone: "",
+        postalCode: "",
+        state: "",
+        userId: "",
       },
-      setAddress: (address: UserAddressInput) => {
+      setAddress: (address: UserAddress) => {
         set({ address });
       },
+      selectedAddressId: null,
+      setSelectedAddressId: (id: string | null) => {
+        set({ selectedAddressId: id })
+      },
+      clearSelectedAddressId: () => {
+        set({ selectedAddressId: null })
+      },
+
     }),
     { name: "address-store" }
   )

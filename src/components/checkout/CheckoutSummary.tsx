@@ -4,6 +4,7 @@ import { useAddressStore, useCartStore } from "@/store";
 import { currencyFormatter } from "@/utils";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
+import { toast } from "sonner";
 
 interface CheckoutSummaryProps {
   className?: string;
@@ -11,6 +12,9 @@ interface CheckoutSummaryProps {
 
 export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
   const [isMounted, setIsMounted] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
+  const cart = useCartStore((state) => state.cart);
   const address = useAddressStore((state) => state.address);
   const { totalItems, subTotal, tax, shipping, totalPrice } = useCartStore(
     useShallow((state) => state.getSummaryInformation())
@@ -19,6 +23,22 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const onPlaceOrder = async () => {
+    setIsPlacingOrder(true);
+
+    const productsToOrder = cart.map((product) => ({
+      id: product.id,
+      quantity: product.quantity,
+      size: product.size,
+    }));
+
+    console.log(address);
+    console.log(productsToOrder);
+
+    setIsPlacingOrder(false);
+    toast.success("Order placed successfully");
+  };
 
   if (!isMounted) return null;
 
@@ -85,8 +105,10 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
         <button
           // href="/orders/1234"
           className="btn-primary w-full text-center block"
+          onClick={onPlaceOrder}
+          disabled={isPlacingOrder}
         >
-          Place Order
+          {isPlacingOrder ? "Placing order..." : "Place Order"}
         </button>
       </div>
     </div>

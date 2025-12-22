@@ -12,4 +12,5 @@ export * from "./address/get-default-address.action";
 export * from "./address/get-user-addresses.action";
 export * from "./address/set-default-address.action";
 export * from "./address/update-user-address.action";
+export * from "./order/place-order.action";
 

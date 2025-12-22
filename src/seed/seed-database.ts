@@ -10,6 +10,10 @@ async function main() {
 
   // 1. Limpiar base de datos (respetar orden de dependencias de llaves foráneas)
   console.log("\n📦 Limpiando base de datos...");
+
+  await prisma.orderAddress.deleteMany();
+  await prisma.orderItem.deleteMany();
+  await prisma.order.deleteMany();
   
   await prisma.userAddress.deleteMany();
   await prisma.country.deleteMany();

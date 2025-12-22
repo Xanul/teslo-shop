@@ -7,6 +7,7 @@ interface SeedAddress {
   postalCode: string;
   phone: string;
   city: string;
+  state: string;
   countryId: string;
   isDefault?: boolean;
 }

@@ -5,6 +5,7 @@ import { currencyFormatter } from "@/utils";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { toast } from "sonner";
+import { placeOrder } from "@/actions";
 
 interface CheckoutSummaryProps {
   className?: string;
@@ -28,13 +29,12 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
     setIsPlacingOrder(true);
 
     const productsToOrder = cart.map((product) => ({
-      id: product.id,
+      productId: product.id,
       quantity: product.quantity,
       size: product.size,
     }));
 
-    console.log(address);
-    console.log(productsToOrder);
+    await placeOrder(productsToOrder, address);
 
     setIsPlacingOrder(false);
     toast.success("Order placed successfully");

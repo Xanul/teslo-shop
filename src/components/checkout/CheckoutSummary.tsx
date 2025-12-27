@@ -34,7 +34,8 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
       size: product.size,
     }));
 
-    await placeOrder(productsToOrder, address);
+    const newOrder = await placeOrder(productsToOrder, address);
+    console.log(newOrder);
 
     setIsPlacingOrder(false);
     toast.success("Order placed successfully");

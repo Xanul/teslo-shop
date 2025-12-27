@@ -1,7 +1,35 @@
 import { cn } from "@/lib/utils";
 import { IoCardOutline } from "react-icons/io5";
 
-export const OrderSummary = () => {
+interface OrderAddress {
+  firstName: string;
+  lastName: string;
+  address: string;
+  address2?: string | null;
+  postalCode: string;
+  city: string;
+  state: string;
+  country: string;
+  phone: string;
+}
+
+interface OrderSummaryProps {
+  orderAddress: OrderAddress;
+  subTotal: number;
+  tax: number;
+  total: number;
+  itemsInOrder: number;
+  isPaid: boolean;
+}
+
+export const OrderSummary = ({
+  orderAddress,
+  subTotal,
+  tax,
+  total,
+  itemsInOrder,
+  isPaid,
+}: OrderSummaryProps) => {
   return (
     <div
       className={
@@ -10,12 +38,16 @@ export const OrderSummary = () => {
     >
       <h3 className="text-xl font-semibold text-gray-900 mb-3">Address</h3>
       <div className="flex flex-col mb-3">
-        <span>John Doe</span>
-        <span>123 Main St</span>
-        <span>Anytown, USA</span>
-        <span>12345</span>
-        <span>USA</span>
-        <span>1234567890</span>
+        <span className="font-semibold">
+          {orderAddress.firstName} {orderAddress.lastName}
+        </span>
+        <span>{orderAddress.phone}</span>
+        <span>{orderAddress.address}</span>
+        {orderAddress.address2 && <span>{orderAddress.address2}</span>}
+        <span>
+          {orderAddress.city}, {orderAddress.state}, {orderAddress.country}
+        </span>
+        <span>{orderAddress.postalCode}</span>
       </div>
 
       <h3 className="text-xl font-semibold text-gray-900 mb-3 pt-3 border-t border-gray-300">
@@ -24,45 +56,35 @@ export const OrderSummary = () => {
       <div className="flex flex-col">
         <div className="flex justify-between items-center">
           <p>No. of products:</p>
-          <span>3</span>
+          <span>{itemsInOrder}</span>
         </div>
         <div className="flex justify-between items-center">
           <p>Subtotal:</p>
-          <span>$100</span>
-        </div>
-        <div className="flex justify-between items-center">
-          <p>Shipping:</p>
-          <span>$10</span>
+          <span>${subTotal.toFixed(2)}</span>
         </div>
         <div className="flex justify-between items-center">
           <p>Tax:</p>
-          <span>$10</span>
+          <span>${tax.toFixed(2)}</span>
         </div>
       </div>
       <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-300">
         <p className="text-xl font-semibold text-gray-900">Total:</p>
-        <span className="text-xl font-semibold text-gray-900">$120</span>
+        <span className="text-xl font-semibold text-gray-900">
+          ${total.toFixed(2)}
+        </span>
       </div>
       <div
         className={cn(
           "flex gap-2 items-center py-2 px-3.5 rounded-lg text-white font-bold my-3",
           {
-            "bg-red-500": false,
-            "bg-emerald-500": true,
+            "bg-red-500": !isPaid,
+            "bg-emerald-500": isPaid,
           }
         )}
       >
         <IoCardOutline size={20} />
-        <h3>Payment confirmed</h3>
+        <h3>{isPaid ? "Payment confirmed" : "Pending payment"}</h3>
       </div>
-      {/* <div className="mt-5">
-    <Link
-      href="/checkout/address"
-      className="btn-primary w-full text-center block"
-    >
-      Place Order
-    </Link>
-  </div> */}
     </div>
   );
 };

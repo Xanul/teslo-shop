@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { ProductToOrder, OrderAddress } from "@/interfaces";
+import { OrderAddress } from "@/interfaces";
 import { Size } from "@prisma/client";
 
 interface CreateOrderData {
@@ -39,6 +39,30 @@ export class OrderRepository {
   async findOrderById(orderId: string) {
     return prisma.order.findUnique({
       where: { id: orderId },
+      include: {
+        orderItems: {
+          select: {
+            id: true,
+            quantity: true,
+            price: true,
+            size: true,
+            product: {
+              select: {
+                id: true,
+                title: true,
+                slug: true,
+                ProductImage: {
+                  select: {
+                    url: true,
+                  },
+                  take: 1,
+                },
+              },
+            },
+          },
+        },
+        orderAddress: true,
+      },
     });
   }
 
@@ -52,14 +76,24 @@ export class OrderRepository {
       orderItems,
       orderAddress,
     } = orderData;
-
     return prisma.$transaction(async (tx) => {
+      // Transaccion de prueba
+      const testProducts = await prisma.product.findMany({
+        where: {
+          id: {
+            in: orderItems.map((p) => p.productId),
+          },
+        },
+      });
+      console.log({ testProducts });
+
       // 1. Verificar y actualizar stock de cada producto
       for (const item of orderItems) {
         const product = await tx.product.findUnique({
           where: { id: item.productId },
           select: { inStock: true, title: true },
         });
+
         if (!product) {
           throw new Error(`Product ${item.productId} not found`);
         }

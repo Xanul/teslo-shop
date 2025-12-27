@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { toast } from "sonner";
 import { placeOrder } from "@/actions";
+import { useRouter } from "next/navigation";
 
 interface CheckoutSummaryProps {
   className?: string;
@@ -15,7 +16,10 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
+  const router = useRouter();
+
   const cart = useCartStore((state) => state.cart);
+  const clearCart = useCartStore((state) => state.clearCart);
   const address = useAddressStore((state) => state.address);
   const { totalItems, subTotal, tax, shipping, totalPrice } = useCartStore(
     useShallow((state) => state.getSummaryInformation())
@@ -28,17 +32,31 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
   const onPlaceOrder = async () => {
     setIsPlacingOrder(true);
 
-    const productsToOrder = cart.map((product) => ({
-      productId: product.id,
-      quantity: product.quantity,
-      size: product.size,
-    }));
+    try {
+      const productsToOrder = cart.map((product) => ({
+        productId: product.id,
+        quantity: product.quantity,
+        size: product.size,
+      }));
 
-    const newOrder = await placeOrder(productsToOrder, address);
-    console.log(newOrder);
+      const response = await placeOrder(productsToOrder, address);
+      console.log(response);
 
-    setIsPlacingOrder(false);
-    toast.success("Order placed successfully");
+      if (!response.ok) {
+        toast.error(response.message || "Error placing order");
+        setIsPlacingOrder(false);
+        return;
+      }
+
+      toast.success("Order placed successfully");
+      clearCart();
+      router.replace(`/orders/${response.orderId}`);
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      toast.error("An unexpected error occurred");
+    } finally {
+      setIsPlacingOrder(false);
+    }
   };
 
   if (!isMounted) return null;

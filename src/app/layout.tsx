@@ -23,7 +23,7 @@ export default function RootLayout({
         <UserProvider>
           {children}
           <Toaster
-            position="top-center"
+            position="bottom-right"
             richColors
             expand={false}
             duration={3000}

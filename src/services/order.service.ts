@@ -2,10 +2,8 @@ import { CART_CONFIG } from "@/config";
 import { ProductToOrder, UserAddress } from "@/interfaces";
 import { OrderRepository } from "@/repositories";
 
-
-
 export class OrderService {
-  constructor(private repository: OrderRepository) { }
+  constructor(private repository: OrderRepository) {}
 
   /**
    * Crea una nueva orden de compra
@@ -20,7 +18,7 @@ export class OrderService {
     orderAddress: UserAddress
   ) {
     // 1. Obtener los productos de la base de datos
-    const productIds = productsToOrder.map(p => p.productId);
+    const productIds = productsToOrder.map((p) => p.productId);
     const uniqueProductIds = new Set(productIds);
     const products = await this.repository.findProductsByIds(productIds);
 
@@ -30,11 +28,11 @@ export class OrderService {
     }
 
     // 3. Crear un mapa de productos para acceso rápido
-    const productsMap = new Map(products.map(p => [p.id, p]));
+    const productsMap = new Map(products.map((p) => [p.id, p]));
 
     // 4. Validar stock, tallas y calcular totales
     let subTotal = 0;
-    const orderItems = productsToOrder.map(item => {
+    const orderItems = productsToOrder.map((item) => {
       const product = productsMap.get(item.productId);
 
       if (!product) {
@@ -43,7 +41,9 @@ export class OrderService {
 
       // Validar que la talla esté disponible
       if (!product.sizes.includes(item.size)) {
-        throw new Error(`Size ${item.size} not available for product ${product.title}`);
+        throw new Error(
+          `Size ${item.size} not available for product ${product.title}`
+        );
       }
 
       // Validar stock
@@ -68,7 +68,10 @@ export class OrderService {
     // 5. Calcular impuestos y totales
     const tax = subTotal * CART_CONFIG.TAX_RATE;
     const total = subTotal + tax;
-    const itemsInOrder = productsToOrder.reduce((acc, item) => acc + item.quantity, 0);
+    const itemsInOrder = productsToOrder.reduce(
+      (acc, item) => acc + item.quantity,
+      0
+    );
 
     // 6. Transformar UserAddress a OrderAddress
     const orderAddressData = {
@@ -97,7 +100,20 @@ export class OrderService {
     return order;
   }
 
+  /**
+   * Obtiene una orden por su ID con toda su información
+   * @param orderId - ID de la orden a buscar
+   * @returns La orden completa con items, dirección y productos, o null si no existe
+   */
+  async getOrderById(orderId: string) {
+    const order = await this.repository.findOrderById(orderId);
 
+    if (!order) {
+      throw new Error("Order not found");
+    }
+
+    return order;
+  }
 }
 
 const orderRepository = new OrderRepository();

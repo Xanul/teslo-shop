@@ -1,10 +1,6 @@
-import {
-  CheckoutProductItem,
-  PageTitle,
-  PaymentConfirm,
-  OrderSummary,
-} from "@/components";
-import { initialData } from "@/seed/seed";
+import { getOrderById } from "@/actions";
+import { PageTitle, OrderSummary, OrderProductItem } from "@/components";
+import { redirect } from "next/navigation";
 
 interface OrderPageProps {
   params: Promise<{
@@ -12,36 +8,37 @@ interface OrderPageProps {
   }>;
 }
 
-const productsInCartMockup = [
-  initialData.products[0],
-  initialData.products[1],
-  initialData.products[2],
-];
-
 export default async function OrderPage({ params }: OrderPageProps) {
   const { id } = await params;
 
-  // Todo: Verificar si la orden existe y pertenece al usuario
+  const shortId = id.slice(0, 6);
+
+  const { ok, order } = await getOrderById(id);
+
+  console.log({ order });
+
+  if (!ok || !order) {
+    redirect("/");
+  }
 
   return (
     <div className="flex justify-center items-center px-2 ">
       <div className="flex flex-col w-6xl">
-        <PageTitle title={`Order: #${id}`} subTitle="Order confirmation" />
-
+        <PageTitle title={`Order: #${shortId}`} subTitle="Order confirmation" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {/* Cart */}
           <div className="flex flex-col gap-3">
-            <PaymentConfirm />
-            {productsInCartMockup.map((product) => (
-              <CheckoutProductItem
-                product={{ ...product, id: product.slug }}
-                key={product.slug}
-                quantity={2}
-              />
+            {order.orderItems.map((product) => (
+              <OrderProductItem orderItem={product} key={product.id} />
             ))}
           </div>
-          {/* Order Summary */}
-          <OrderSummary />
+          <OrderSummary
+            orderAddress={order.orderAddress!}
+            subTotal={order.subTotal}
+            tax={order.tax}
+            total={order.total}
+            itemsInOrder={order.itemsInOrder}
+            isPaid={order.isPaid}
+          />
         </div>
       </div>
     </div>

@@ -33,6 +33,4 @@ export * from "./profile/AddressList";
 export * from "./ui/button/Button";
 export * from "./ui/link/LinkButton";
 export * from "./checkout/ProductsInCheckout";
-
-
-
+export * from "./order/OrderProductItem";

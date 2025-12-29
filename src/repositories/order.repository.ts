@@ -66,6 +66,36 @@ export class OrderRepository {
     });
   }
 
+  async findOrderByUser(userId: string) {
+    return prisma.order.findMany({
+      where: { userId },
+      include: {
+        orderItems: {
+          select: {
+            id: true,
+            quantity: true,
+            price: true,
+            size: true,
+            product: {
+              select: {
+                id: true,
+                title: true,
+                slug: true,
+                ProductImage: {
+                  select: {
+                    url: true,
+                  },
+                  take: 1,
+                },
+              },
+            },
+          },
+        },
+        orderAddress: true,
+      },
+    });
+  }
+
   async createOrder(orderData: CreateOrderData) {
     const {
       userId,

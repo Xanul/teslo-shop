@@ -114,6 +114,16 @@ export class OrderService {
 
     return order;
   }
+
+  async getOrdersByUser(userId: string) {
+    const orders = await this.repository.findOrderByUser(userId);
+
+    if (!orders) {
+      throw new Error("Orders not found");
+    }
+
+    return orders;
+  }
 }
 
 const orderRepository = new OrderRepository();

@@ -1,17 +1,11 @@
 import { CART_CONFIG } from "@/config";
 import { ProductToOrder, UserAddress } from "@/interfaces";
 import { OrderRepository } from "@/repositories";
+import { OrderStatus, PaymentMethod } from "@prisma/client";
 
 export class OrderService {
   constructor(private repository: OrderRepository) {}
 
-  /**
-   * Crea una nueva orden de compra
-   * @param productsToOrder - Productos a ordenar con cantidad y talla
-   * @param userId - ID del usuario que realiza la orden
-   * @param orderAddress - Dirección de envío
-   * @returns La orden creada con todos sus detalles
-   */
   async createOrder(
     productsToOrder: ProductToOrder[],
     userId: string,
@@ -100,11 +94,6 @@ export class OrderService {
     return order;
   }
 
-  /**
-   * Obtiene una orden por su ID con toda su información
-   * @param orderId - ID de la orden a buscar
-   * @returns La orden completa con items, dirección y productos, o null si no existe
-   */
   async getOrderById(orderId: string) {
     const order = await this.repository.findOrderById(orderId);
 
@@ -123,6 +112,18 @@ export class OrderService {
     }
 
     return orders;
+  }
+
+  async updateOrderStatus(orderId: string, status: OrderStatus) {
+    return this.repository.updateOrderStatus(orderId, status);
+  }
+
+  async markOrderAsPaid(orderId: string) {
+    return this.repository.markOrderAsPaid(orderId);
+  }
+
+  async setPaymentMethod(orderId: string, paymentMethod: PaymentMethod) {
+    return this.repository.setPaymentMethod(orderId, paymentMethod);
   }
 }
 

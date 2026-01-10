@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { OrderAddress } from "@/interfaces";
-import { Size } from "@prisma/client";
+import { OrderStatus, Size, PaymentMethod } from "@prisma/client";
 
 interface CreateOrderData {
   userId: string;
@@ -107,16 +107,6 @@ export class OrderRepository {
       orderAddress,
     } = orderData;
     return prisma.$transaction(async (tx) => {
-      // Transaccion de prueba
-      const testProducts = await prisma.product.findMany({
-        where: {
-          id: {
-            in: orderItems.map((p) => p.productId),
-          },
-        },
-      });
-      console.log({ testProducts });
-
       // 1. Verificar y actualizar stock de cada producto
       for (const item of orderItems) {
         const product = await tx.product.findUnique({
@@ -189,6 +179,38 @@ export class OrderRepository {
         },
       });
       return order;
+    });
+  }
+
+  async setTransactionId(orderId: string, transactionId: string) {
+    return prisma.order.update({
+      where: { id: orderId },
+      data: { transactionId },
+    });
+  }
+
+  async updateOrderStatus(orderId: string, status: OrderStatus) {
+    return prisma.order.update({
+      where: { id: orderId },
+      data: { status },
+    });
+  }
+
+  async markOrderAsPaid(orderId: string) {
+    return prisma.order.update({
+      where: { id: orderId },
+      data: {
+        isPaid: true,
+        status: "PAID",
+        paidAt: new Date(),
+      },
+    });
+  }
+
+  async setPaymentMethod(orderId: string, paymentMethod: PaymentMethod) {
+    return prisma.order.update({
+      where: { id: orderId },
+      data: { paymentMethod },
     });
   }
 }

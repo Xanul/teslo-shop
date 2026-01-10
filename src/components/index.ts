@@ -14,6 +14,8 @@ export * from "./order/OrderSummary";
 export * from "./order/OrderTable";
 export * from "./order/PaymentConfirm";
 
+export * from "./paypal/PayPalButton";
+
 export * from "./product/add-to-cart/AddToCart";
 export * from "./product/quantity-selector/QuantitySelector";
 export * from "./product/size-selector/SizeSelector";
@@ -27,7 +29,7 @@ export * from "./products/product-grid/ProductGridItem";
 export * from "./profile/addresses/AddressCard";
 export * from "./profile/AddressList";
 
-export * from "./providers/UserProvider";
+export * from "./providers/Providers";
 
 export * from "./ui/button/Button";
 export * from "./ui/footer/Footer";

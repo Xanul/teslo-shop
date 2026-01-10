@@ -1,5 +1,10 @@
 import { getOrderById } from "@/actions";
-import { PageTitle, OrderSummary, OrderProductItem } from "@/components";
+import {
+  PageTitle,
+  OrderSummary,
+  OrderProductItem,
+  PaymentConfirm,
+} from "@/components";
 import { redirect } from "next/navigation";
 
 interface OrderPageProps {
@@ -15,8 +20,6 @@ export default async function OrderPage({ params }: OrderPageProps) {
 
   const { ok, order } = await getOrderById(id);
 
-  console.log({ order });
-
   if (!ok || !order) {
     redirect("/");
   }
@@ -27,11 +30,13 @@ export default async function OrderPage({ params }: OrderPageProps) {
         <PageTitle title={`Order: #${shortId}`} subTitle="Order confirmation" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <div className="flex flex-col gap-3">
+            <PaymentConfirm isPaid={order.isPaid} />
             {order.orderItems.map((product) => (
               <OrderProductItem orderItem={product} key={product.id} />
             ))}
           </div>
           <OrderSummary
+            orderId={order.id}
             orderAddress={order.orderAddress!}
             subTotal={order.subTotal}
             tax={order.tax}

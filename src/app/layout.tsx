@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { inter } from "@/config/fonts";
 import "./globals.css";
 import { Toaster } from "sonner";
-import { UserProvider } from "@/components";
+import { Providers } from "@/components";
 
 export const metadata: Metadata = {
   title: {
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <UserProvider>
+        <Providers>
           {children}
           <Toaster
             position="bottom-right"
@@ -28,7 +28,7 @@ export default function RootLayout({
             expand={false}
             duration={3000}
           />
-        </UserProvider>
+        </Providers>
       </body>
     </html>
   );

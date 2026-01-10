@@ -49,11 +49,10 @@ export class AddressService {
     }
   }
 
-  /**
-   * Crea una nueva dirección para un usuario.
-   * Recibe UserAddressInput y retorna UserAddress con relaciones.
-   */
-  async createAddress(userId: string, address: UserAddressInput): Promise<UserAddress> {
+  async createAddress(
+    userId: string,
+    address: UserAddressInput
+  ): Promise<UserAddress> {
     try {
       const newAddress = await this.repository.create(userId, address);
       return newAddress;
@@ -62,37 +61,39 @@ export class AddressService {
     }
   }
 
-  /**
-   * Actualiza la dirección existente de un usuario.
-   * Recibe UserAddressInput y retorna UserAddress actualizada.
-   */
   async updateAddress(
     addressId: string,
     userId: string,
     address: UserAddressInput
   ): Promise<UserAddress> {
-  
     try {
-      const updatedAddress = await this.repository.update(addressId, userId, address);
-      return updatedAddress
+      const updatedAddress = await this.repository.update(
+        addressId,
+        userId,
+        address
+      );
+      return updatedAddress;
     } catch (error) {
       throw new DatabaseError("Error updating address", "updateAddress", error);
     }
   }
 
-  async setDefaultAddress(addressId: string, userId: string): Promise<UserAddress> {
+  async setDefaultAddress(
+    addressId: string,
+    userId: string
+  ): Promise<UserAddress> {
     try {
       const address = await this.repository.setAsDefault(addressId, userId);
       return address;
     } catch (error) {
-      throw new DatabaseError("Error setting default address", "setDefaultAddress", error);
+      throw new DatabaseError(
+        "Error setting default address",
+        "setDefaultAddress",
+        error
+      );
     }
   }
 
-  /**
-   * Crea o actualiza la dirección de un usuario (upsert).
-   * Recibe UserAddressInput y retorna UserAddress.
-   */
   async deleteAddress(addressId: string, userId: string): Promise<boolean> {
     try {
       const deleted = await this.repository.delete(addressId, userId);

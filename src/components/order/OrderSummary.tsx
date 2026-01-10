@@ -1,5 +1,4 @@
-import { cn } from "@/lib/utils";
-import { IoCardOutline } from "react-icons/io5";
+import { PayPalButton } from "@/components";
 
 interface OrderAddress {
   firstName: string;
@@ -19,6 +18,7 @@ interface OrderSummaryProps {
   tax: number;
   total: number;
   itemsInOrder: number;
+  orderId: string;
   isPaid: boolean;
 }
 
@@ -28,6 +28,7 @@ export const OrderSummary = ({
   tax,
   total,
   itemsInOrder,
+  orderId,
   isPaid,
 }: OrderSummaryProps) => {
   return (
@@ -73,18 +74,11 @@ export const OrderSummary = ({
           ${total.toFixed(2)}
         </span>
       </div>
-      <div
-        className={cn(
-          "flex gap-2 items-center py-2 px-3.5 rounded-lg text-white font-bold my-3",
-          {
-            "bg-red-500": !isPaid,
-            "bg-emerald-500": isPaid,
-          }
-        )}
-      >
-        <IoCardOutline size={20} />
-        <h3>{isPaid ? "Payment confirmed" : "Pending payment"}</h3>
-      </div>
+      {!isPaid && (
+        <div className="mt-5 w-full">
+          <PayPalButton orderId={orderId} amount={total} />
+        </div>
+      )}
     </div>
   );
 };

@@ -114,6 +114,10 @@ export class OrderService {
     return orders;
   }
 
+  async getAllOrders() {
+    return this.repository.findManyOrders();
+  }
+
   async updateOrderStatus(orderId: string, status: OrderStatus) {
     return this.repository.updateOrderStatus(orderId, status);
   }

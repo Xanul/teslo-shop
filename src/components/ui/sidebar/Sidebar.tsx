@@ -116,7 +116,7 @@ export const Sidebar = () => {
               onClick={() => closeSideMenu()}
             />
             <SidebarMenuItem
-              href={"/"}
+              href={"/admin/orders"}
               icon={IoTicketOutline}
               label="Orders Managment"
               onClick={() => closeSideMenu()}

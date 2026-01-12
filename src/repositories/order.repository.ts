@@ -96,6 +96,23 @@ export class OrderRepository {
     });
   }
 
+  // TODO: Agregar paginacion
+  async findManyOrders() {
+    return prisma.order.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        orderAddress: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+  }
+
   async createOrder(orderData: CreateOrderData) {
     const {
       userId,

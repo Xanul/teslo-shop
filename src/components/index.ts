@@ -43,3 +43,6 @@ export * from "./ui/title/PageTitle";
 export * from "./ui/top-menu/CartBadge";
 export * from "./ui/top-menu/NavLink";
 export * from "./ui/top-menu/TopMenu";
+
+export * from "./users/UserRow";
+export * from "./users/UsersTable";

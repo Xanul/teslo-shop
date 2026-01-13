@@ -122,7 +122,7 @@ export const Sidebar = () => {
               onClick={() => closeSideMenu()}
             />
             <SidebarMenuItem
-              href={"/"}
+              href={"/admin/users"}
               icon={IoPeopleOutline}
               label="Users Managment"
               onClick={() => closeSideMenu()}

@@ -7,11 +7,10 @@ import { Gender } from "@/interfaces";
 import { isValidGender } from "@/utils";
 import { redirect } from "next/navigation";
 
-
 interface CategoryPageProps {
   searchParams: Promise<{
-    page?: string
-  }>
+    page?: string;
+  }>;
   params: Promise<{
     id: Gender;
   }>;
@@ -19,23 +18,33 @@ interface CategoryPageProps {
 
 // TODO: Revisar con IA implementacion de este componente
 
-export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
+export default async function CategoryPage({
+  params,
+  searchParams,
+}: CategoryPageProps) {
   const props = await params;
   const searchProps = await searchParams;
   const page = searchProps.page ? parseInt(searchProps.page) : 1;
   const { id } = props;
 
   if (!isValidGender(id)) {
-    redirect('/');
+    redirect("/");
   }
-  
-  const { products, totalPages } = await getPaginatedProductsWithImages({page, category: id});
 
-  if ( products.length === 0 && page > 1 ) redirect(`/category/${id}`);
-  
+  const { products, totalPages } = await getPaginatedProductsWithImages({
+    page,
+    category: id,
+  });
+
+  if (products.length === 0 && page > 1) redirect(`/category/${id}`);
+
   return (
     <div>
-      <PageTitle title={`${CATEGORY_LABELS[id] } Category`} subTitle={CATEGORY_SUBTITLES[id]} className="mb-2" />
+      <PageTitle
+        title={`${CATEGORY_LABELS[id]} Category`}
+        subTitle={CATEGORY_SUBTITLES[id]}
+        className="mb-2"
+      />
       <ProductGrid products={products} />
       <Pagination totalPages={totalPages} />
     </div>

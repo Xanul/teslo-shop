@@ -2,7 +2,7 @@
 import { auth } from "@/config/auth.config";
 import { userService } from "@/services";
 
-export const getPaginatedUsers = async () => {
+export const getPaginatedUsers = async (page?: number, take?: number) => {
   const session = await auth();
 
   if (!session?.user || session?.user.role !== "admin") {
@@ -13,9 +13,14 @@ export const getPaginatedUsers = async () => {
   }
 
   try {
-    const users = await userService.getAllUsers();
+    const { currentPage, totalPages, users } = await userService.getAllUsers({
+      page,
+      take,
+    });
     return {
       ok: true,
+      currentPage,
+      totalPages,
       users,
     };
   } catch (error) {

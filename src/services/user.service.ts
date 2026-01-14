@@ -1,3 +1,4 @@
+import { UserRole } from "@/interfaces";
 import { UserRepository } from "@/repositories";
 import { validatePaginationParams } from "@/utils";
 
@@ -30,6 +31,10 @@ export class UserService {
       console.error("error", error);
       throw error;
     }
+  }
+
+  async updateUserRole(userId: string, role: UserRole) {
+    return this.repository.updateRole(userId, role);
   }
 }
 

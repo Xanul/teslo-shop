@@ -7,3 +7,5 @@ export interface User {
   role: string;
   image?: string | null;
 }
+
+export type UserRole = "admin" | "user";

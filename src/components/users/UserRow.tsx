@@ -1,7 +1,9 @@
 "use client";
 
-import { User } from "@/interfaces";
+import { updateUserRole } from "@/actions";
+import { User, UserRole } from "@/interfaces";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface UserRowProps {
   user: User;
@@ -11,18 +13,18 @@ export const UserRow = ({ user }: UserRowProps) => {
   const [role, setRole] = useState(user.role);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const handleRoleChange = async (newRole: string) => {
+  const handleRoleChange = async (newRole: UserRole) => {
     setIsUpdating(true);
     setRole(newRole);
 
-    // TODO: Aquí deberías llamar a tu action para actualizar el rol del usuario
-    // Por ejemplo:
-    // try {
-    //   await updateUserRole(user.id, newRole);
-    // } catch (error) {
-    //   console.error("Error updating role:", error);
-    //   setRole(user.role); // Revertir en caso de error
-    // }
+    try {
+      await updateUserRole(user.id, newRole);
+      toast.success(`User role of ${user.name} updated successfully`);
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      setRole(user.role); // Revertir en caso de error
+      toast.error("Error updating user role");
+    }
 
     setIsUpdating(false);
   };
@@ -38,7 +40,7 @@ export const UserRow = ({ user }: UserRowProps) => {
       <td className="text-sm px-6 py-4 whitespace-nowrap">
         <select
           value={role}
-          onChange={(e) => handleRoleChange(e.target.value)}
+          onChange={(e) => handleRoleChange(e.target.value as UserRole)}
           disabled={isUpdating}
           className={`
             px-3 py-2 border rounded-md text-sm font-medium

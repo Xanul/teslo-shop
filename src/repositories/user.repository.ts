@@ -1,3 +1,4 @@
+import { UserRole } from "@/interfaces";
 import prisma from "@/lib/prisma";
 
 export class UserRepository {
@@ -5,6 +6,17 @@ export class UserRepository {
     return prisma.user.findMany({
       take,
       skip,
+    });
+  }
+
+  async updateRole(userId: string, role: UserRole) {
+    return prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        role,
+      },
     });
   }
 

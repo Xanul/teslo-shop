@@ -23,3 +23,4 @@ export * from "./product/get-paginated-products.action";
 export * from "./product/get-product-by-slug.action";
 
 export * from "./user/get-paginated-users.action";
+export * from "./user/update-user-role.action";

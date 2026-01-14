@@ -110,7 +110,7 @@ export const Sidebar = () => {
         {isAdmin && (
           <SidebarSection title="Admin">
             <SidebarMenuItem
-              href={"/"}
+              href={"/admin/products"}
               icon={IoShirtOutline}
               label="Products Managment"
               onClick={() => closeSideMenu()}

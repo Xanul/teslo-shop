@@ -25,6 +25,8 @@ export * from "./product/stock-label/StockLabel";
 
 export * from "./products/product-grid/ProductGrid";
 export * from "./products/product-grid/ProductGridItem";
+export * from "./products/ProductRow";
+export * from "./products/ProductsTable";
 
 export * from "./profile/addresses/AddressCard";
 export * from "./profile/AddressList";

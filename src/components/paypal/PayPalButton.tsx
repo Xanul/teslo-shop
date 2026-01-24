@@ -11,6 +11,7 @@ import {
   attachTransactionReferenceToOrder,
   checkPaypalPayment,
 } from "@/actions";
+import { toast } from "sonner";
 
 interface PayPalButtonProps {
   orderId: string;
@@ -32,7 +33,7 @@ export const PayPalButton = ({ orderId, amount }: PayPalButtonProps) => {
 
   const createOrder = async (
     data: CreateOrderData,
-    actions: CreateOrderActions
+    actions: CreateOrderActions,
   ): Promise<string> => {
     const transactionId = await actions.order.create({
       intent: "CAPTURE",
@@ -64,9 +65,14 @@ export const PayPalButton = ({ orderId, amount }: PayPalButtonProps) => {
 
     if (!details || !details.id) return;
 
-    const { ok, message } = await checkPaypalPayment(details.id);
-    console.log({ ok });
-    console.log({ message });
+    const { ok } = await checkPaypalPayment(details.id);
+
+    if (!ok) {
+      toast.error("Error verifying payment");
+      return;
+    }
+
+    toast.success("Payment verified successfully");
   };
 
   return <PayPalButtons createOrder={createOrder} onApprove={onApprove} />;

@@ -22,7 +22,7 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
   const clearCart = useCartStore((state) => state.clearCart);
   const address = useAddressStore((state) => state.address);
   const { totalItems, subTotal, tax, shipping, totalPrice } = useCartStore(
-    useShallow((state) => state.getSummaryInformation())
+    useShallow((state) => state.getSummaryInformation()),
   );
 
   useEffect(() => {
@@ -40,7 +40,6 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
       }));
 
       const response = await placeOrder(productsToOrder, address);
-      console.log(response);
 
       if (!response.ok) {
         toast.error(response.message || "Error placing order");
@@ -65,7 +64,7 @@ export const CheckoutSummary = ({ className }: CheckoutSummaryProps) => {
     <div
       className={cn(
         "bg-gray-100 border border-gray-300 shadow-md p-5 rounded-lg h-fit",
-        className
+        className,
       )}
     >
       <h3 className="text-xl font-semibold text-gray-900 mb-3">Address</h3>

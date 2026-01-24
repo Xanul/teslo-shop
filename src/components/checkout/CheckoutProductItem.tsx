@@ -1,6 +1,7 @@
 // src/components/checkout/CheckoutProductItem.tsx
 import { CartProduct } from "@/interfaces";
-import Image from "next/image";
+import { ProductImage } from "../product/ProductImage";
+import Link from "next/link";
 
 interface CheckoutProductItemProps {
   product: CartProduct;
@@ -16,15 +17,17 @@ export const CheckoutProductItem = ({
   return (
     <div className="flex gap-4 p-4 border border-gray-200 rounded-lg">
       {/* Product Image */}
-      <figure className="flex-shrink-0 flex items-center">
-        <Image
-          alt={product.title}
-          src={`/products/${product.image}`}
-          width={120}
-          height={120}
-          className="w-18 h-18 object-cover rounded"
-        />
-      </figure>
+      <Link href={`/product/${product.slug}`}>
+        <figure className="flex-shrink-0 flex items-center">
+          <ProductImage
+            alt={product.title}
+            src={product.image}
+            width={120}
+            height={120}
+            className="w-18 h-18 object-cover rounded"
+          />
+        </figure>
+      </Link>
 
       {/* Product Info */}
       <div className="flex-1 flex flex-col gap-2 min-w-0">

@@ -12,8 +12,8 @@ interface ProductPageProps {
 }
 
 export async function generateMetadata(
-  {params}: ProductPageProps,
-  parent: ResolvingMetadata
+  { params }: ProductPageProps,
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
@@ -24,10 +24,9 @@ export async function generateMetadata(
     openGraph: {
       title: product?.title ?? "Product not found",
       description: product?.description ?? "Product not found",
-      images: [`/products/${product?.images[1] ?? ""}`]
-    }
-  }
-
+      images: [`/products/${product?.images[1] ?? ""}`],
+    },
+  };
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -38,9 +37,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  // TODO: Eliminar el padding del bottom al agregar el footer
   return (
-    <div className="sm:mt-5 mb-20 pb-10 grid grid-cols-1 md:grid-cols-3 gap-3">
+    <div className="sm:mt-5 grid grid-cols-1 md:grid-cols-3 gap-3">
       {/* Slideshow */}
       <div className="col-span-1 md:col-span-2">
         <ProductSlideshow title={product.title} images={product.images} />
@@ -48,7 +46,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {/* Product Info */}
       <div className="col-span-1 px-5">
         {/* Stock label */}
-        <StockLabel slug={slug}/>
+        <StockLabel slug={slug} />
         {/* Product title */}
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
           {product.title}

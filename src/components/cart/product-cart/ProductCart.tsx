@@ -1,7 +1,6 @@
+import { ProductImage } from "@/components/product/ProductImage";
 import { CartProduct } from "@/interfaces";
-import Image from "next/image";
 import Link from "next/link";
-// import { QuantitySelector } from "@/components";
 
 interface ProductCartProps {
   product: CartProduct;
@@ -17,16 +16,14 @@ export const ProductCart = ({
   return (
     <div className="flex gap-4 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
       {/* Product Image */}
-      <Link
-        href={`/product/${product.slug}`}
-      >
+      <Link href={`/product/${product.slug}`}>
         <figure className="flex-shrink-0 flex items-center">
-          <Image
+          <ProductImage
             alt={product.title}
-            src={`/products/${product.image}`}
+            src={product.image}
             width={120}
             height={120}
-            className="w-18 h:18  object-cover rounded"
+            className="w-18 h-18 object-cover rounded"
           />
         </figure>
       </Link>

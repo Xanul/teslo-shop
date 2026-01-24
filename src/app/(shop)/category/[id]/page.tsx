@@ -16,7 +16,26 @@ interface CategoryPageProps {
   }>;
 }
 
-// TODO: Revisar con IA implementacion de este componente
+export async function generateMetadata({ params }: CategoryPageProps) {
+  const { id } = await params;
+
+  if (!isValidGender(id)) {
+    return {
+      title: "Category not found",
+      description: "Category not found",
+    };
+  }
+
+  return {
+    title: `${CATEGORY_LABELS[id]} Category | Teslo Shop`,
+    description: `${CATEGORY_LABELS[id]} Category | Teslo Shop`,
+    openGraph: {
+      title: `${CATEGORY_LABELS[id]} Category | Teslo Shop`,
+      description: `${CATEGORY_LABELS[id]} Category | Teslo Shop`,
+      images: [`/categories/${id}.png`],
+    },
+  };
+}
 
 export default async function CategoryPage({
   params,

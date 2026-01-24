@@ -96,7 +96,6 @@ export class OrderRepository {
     });
   }
 
-  // TODO: Agregar paginacion
   async findManyOrders() {
     return prisma.order.findMany({
       orderBy: {
@@ -136,7 +135,7 @@ export class OrderRepository {
         }
         if (product.inStock < item.quantity) {
           throw new Error(
-            `Insufficient stock for ${product.title}. Available ${product.inStock}`
+            `Insufficient stock for ${product.title}. Available ${product.inStock}`,
           );
         }
         await tx.product.update({

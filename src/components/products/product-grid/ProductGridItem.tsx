@@ -1,38 +1,34 @@
 "use client";
+import { ProductImage } from "@/components/product/ProductImage";
 import { Product } from "@/interfaces";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-
 interface ProductGridItemProps {
-    product: Product;
+  product: Product;
 }
 
 export const ProductGridItem = ({ product }: ProductGridItemProps) => {
+  const [displayImage, setDisplayImage] = useState(product.images[0]);
 
-    const [displayImage, setDisplayImage] = useState(product.images[0]);
-
-    return (
-        <div className={cn("rounded-md overflow-hidden fade-in")}>
-            <Link href={`/product/${product.slug}`}>
-                <Image 
-                    src={`/products/${displayImage}`}
-                    alt={product.title}
-                    className="w-full object-cover transition-all duration-300 hover:scale-105 rounded-md"
-                    width={500}
-                    height={500}
-                    onMouseEnter={() => setDisplayImage(product.images[1])}
-                    onMouseLeave={() => setDisplayImage(product.images[0])}
-                />
-                <div className="p-4 flex flex-col">
-                    <span className="hover:text-blue-600">
-                        {product.title}
-                    </span>
-                    <span className="font-bold">$ {product.price}</span>
-                </div>
-            </Link>
+  return (
+    <div className={cn("rounded-md overflow-hidden fade-in")}>
+      <Link href={`/product/${product.slug}`}>
+        <ProductImage
+          src={displayImage}
+          alt={product.title}
+          className="w-full object-cover transition-all duration-300 hover:scale-105 rounded-md"
+          width={500}
+          height={500}
+          onMouseEnter={() => setDisplayImage(product.images[1])}
+          onMouseLeave={() => setDisplayImage(product.images[0])}
+        />
+        <div className="p-4 flex flex-col">
+          <span className="hover:text-blue-600">{product.title}</span>
+          <span className="font-bold">$ {product.price}</span>
         </div>
-    )
-}
+      </Link>
+    </div>
+  );
+};

@@ -8,14 +8,14 @@ import { useCartStore, useUIStore } from "@/store";
 import { useEffect, useState } from "react";
 
 export const TopMenu = () => {
-  const totalItems = useCartStore((state) => state.getTotalItems())
+  const totalItems = useCartStore((state) => state.getTotalItems());
   const { openSideMenu } = useUIStore();
 
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-  }, []) 
+  }, []);
 
   const hasItems = isMounted && totalItems > 0;
   const cartHref = hasItems ? "/cart" : "/empty";
@@ -40,23 +40,22 @@ export const TopMenu = () => {
       </div>
       {/* Right Menu */}
       <div className="flex items-center gap-3">
-        <Link href="/search">
+        <Link href="/">
           <IoSearchOutline className="w-5 h-5" />
         </Link>
 
         <Link href={cartHref}>
           <div className="relative">
-            {
-              (isMounted && totalItems > 0) && (
-                <CartBadge count={totalItems} />
-              ) 
-            }
+            {isMounted && totalItems > 0 && <CartBadge count={totalItems} />}
             <IoCartOutline className="w-5 h-5" />
           </div>
         </Link>
         {/* Mobile Menu */}
-        <button className="p-2 rounded-md transition-all hover:bg-gray-100" onClick={openSideMenu}>
-            Menu
+        <button
+          className="p-2 rounded-md transition-all hover:bg-gray-100"
+          onClick={openSideMenu}
+        >
+          Menu
         </button>
       </div>
     </nav>

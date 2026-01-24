@@ -10,7 +10,6 @@ export class AddressService {
    * Retorna UserAddress con el país completo incluido, o null si no existe.
    */
   async getUserAddresses(userId: string): Promise<UserAddress[]> {
-    console.log("UserID: ", userId);
     try {
       const addresses = await this.repository.findAllByUserId(userId);
       return addresses;
@@ -18,7 +17,7 @@ export class AddressService {
       throw new DatabaseError(
         "Error fetching user addresses",
         "getUserAddresses",
-        error
+        error,
       );
     }
   }
@@ -31,7 +30,7 @@ export class AddressService {
       throw new DatabaseError(
         "Error fetching default address",
         "getDefaultAddress",
-        error
+        error,
       );
     }
   }
@@ -44,14 +43,14 @@ export class AddressService {
       throw new DatabaseError(
         "Error fetching address",
         "getAddressById",
-        error
+        error,
       );
     }
   }
 
   async createAddress(
     userId: string,
-    address: UserAddressInput
+    address: UserAddressInput,
   ): Promise<UserAddress> {
     try {
       const newAddress = await this.repository.create(userId, address);
@@ -64,13 +63,13 @@ export class AddressService {
   async updateAddress(
     addressId: string,
     userId: string,
-    address: UserAddressInput
+    address: UserAddressInput,
   ): Promise<UserAddress> {
     try {
       const updatedAddress = await this.repository.update(
         addressId,
         userId,
-        address
+        address,
       );
       return updatedAddress;
     } catch (error) {
@@ -80,7 +79,7 @@ export class AddressService {
 
   async setDefaultAddress(
     addressId: string,
-    userId: string
+    userId: string,
   ): Promise<UserAddress> {
     try {
       const address = await this.repository.setAsDefault(addressId, userId);
@@ -89,7 +88,7 @@ export class AddressService {
       throw new DatabaseError(
         "Error setting default address",
         "setDefaultAddress",
-        error
+        error,
       );
     }
   }

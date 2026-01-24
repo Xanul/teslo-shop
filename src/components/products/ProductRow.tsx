@@ -1,21 +1,19 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/interfaces";
+import { ProductImage } from "@/components/product/ProductImage";
 
 interface ProductRowProps {
   product: Product;
 }
 
 export const ProductRow = ({ product }: ProductRowProps) => {
-  const imageUrl = `/products/${product.images[0]}` || `/imgs/placeholder.png`;
-
   return (
     <tr className="bg-white border-b border-gray-300 transition duration-300 ease-in-out hover:bg-gray-100">
       {/* Image */}
       <td className="px-6 py-4 whitespace-nowrap">
         <Link href={`/product/${product.slug}`}>
-          <Image
-            src={imageUrl}
+          <ProductImage
+            src={product.images[0]}
             alt={product.title}
             width={80}
             height={80}
@@ -26,7 +24,10 @@ export const ProductRow = ({ product }: ProductRowProps) => {
 
       {/* Title */}
       <td className="text-sm text-gray-900 font-light px-6 py-4">
-        <Link href={`/product/${product.slug}`} className="hover:underline">
+        <Link
+          href={`/admin/product/${product.slug}`}
+          className="hover:underline"
+        >
           {product.title}
         </Link>
       </td>

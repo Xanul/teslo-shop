@@ -1,12 +1,10 @@
-'use server'
+"use server";
 
 import { productService } from "@/services";
 import { Product } from "@/interfaces";
 
-
-export const getProductBySlug = async (slug: string):Promise<Product | null> => {
-
+export const getProductBySlug = async (
+  slug: string,
+): Promise<Product | null> => {
   return productService.getProductBySlug(slug);
-
-
-}
+};

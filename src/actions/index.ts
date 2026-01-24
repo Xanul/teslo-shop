@@ -21,6 +21,10 @@ export * from "./order/get-paginated-orders.action";
 
 export * from "./product/get-paginated-products.action";
 export * from "./product/get-product-by-slug.action";
+export * from "./product/get-all-categories.action";
+export * from "./product/create-product.action";
+export * from "./product/update-product.action";
+export * from "./product/delete-product.image.action";
 
 export * from "./user/get-paginated-users.action";
 export * from "./user/update-user-role.action";

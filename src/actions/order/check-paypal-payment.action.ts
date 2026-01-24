@@ -34,10 +34,11 @@ export const checkPaypalPayment = async (transactionId: string) => {
       data: paymentData,
     };
   } catch (error) {
-    console.log(error);
+    console.error("Error verifying payment:", error);
     return {
       ok: false,
-      message: "Error verifying payment",
+      message:
+        error instanceof Error ? error.message : "Error verifying payment",
     };
   }
 };

@@ -5,7 +5,7 @@ import { AuthError } from "next-auth";
 
 export async function authenticate(
   prevState: string | undefined,
-  formData: FormData
+  formData: FormData,
 ) {
   try {
     await signIn("credentials", {
@@ -32,15 +32,18 @@ export async function authenticate(
 
 export async function login(email: string, password: string) {
   try {
-    await signIn("credentials", {email, password})
+    await signIn("credentials", { email, password });
     return {
-      ok: true
-    }
+      ok: true,
+    };
   } catch (error) {
-    console.log(error);
+    console.error("Error logging in:", error);
     return {
       ok: false,
-      message: "An error occurred while logging in"
-    }
+      message:
+        error instanceof AuthError
+          ? error.message
+          : "An error occurred while logging in",
+    };
   }
-} 
+}

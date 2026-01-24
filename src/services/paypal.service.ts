@@ -11,7 +11,7 @@ export class PayPalService {
 
     const base64Token = Buffer.from(
       `${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}`,
-      "utf-8"
+      "utf-8",
     ).toString("base64");
 
     const myHeaders = new Headers();
@@ -35,7 +35,7 @@ export class PayPalService {
       const data = await response.json();
       return data.access_token;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return null;
     }
   }
@@ -45,7 +45,7 @@ export class PayPalService {
   }
 
   async verifyPaypalPayment(
-    transactionId: string
+    transactionId: string,
   ): Promise<PayPalOrderStatusResponse | null> {
     const PAYPAL_ORDER_URL = process.env.PAYPAL_ORDERS_URL || "";
     const bearerToken = await this.getPayPalBearerToken();
@@ -66,7 +66,7 @@ export class PayPalService {
 
       return data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return null;
     }
   }

@@ -9,7 +9,7 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import "./slideshow.css";
 import { Autoplay, FreeMode, Navigation, Thumbs } from "swiper/modules";
-import Image from "next/image";
+import { ProductImage } from "../ProductImage";
 
 interface ProductSlideshowProps {
   images: string[];
@@ -36,7 +36,7 @@ export const ProductSlideshow = ({
         spaceBetween={10}
         navigation={true}
         autoplay={{
-          delay: 200000,
+          delay: 5000,
         }}
         thumbs={{ swiper: thumbsSwiper }}
         modules={[FreeMode, Navigation, Thumbs, Autoplay]}
@@ -44,8 +44,8 @@ export const ProductSlideshow = ({
       >
         {images.map((image) => (
           <SwiperSlide key={image}>
-            <Image
-              src={`/products/${image}`}
+            <ProductImage
+              src={image}
               alt={title}
               width={1024}
               height={800}
@@ -66,8 +66,8 @@ export const ProductSlideshow = ({
         >
           {images.map((image) => (
             <SwiperSlide key={image}>
-              <Image
-                src={`/products/${image}`}
+              <ProductImage
+                src={image}
                 alt={title}
                 width={300}
                 height={300}

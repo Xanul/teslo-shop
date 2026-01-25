@@ -4,7 +4,6 @@
 import { UserAddress } from "@/interfaces";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 interface Props {
   addresses: UserAddress[];
@@ -13,7 +12,7 @@ interface Props {
 export const AddressCheckoutSelector = ({ addresses }: Props) => {
   const router = useRouter();
   const [selectedId, setSelectedId] = useState<string | undefined>(
-    addresses.find(a => a.isDefault)?.id
+    addresses.find((a) => a.isDefault)?.id,
   );
 
   const handleSelect = (addressId: string) => {
@@ -41,7 +40,9 @@ export const AddressCheckoutSelector = ({ addresses }: Props) => {
             </span>
           )}
           <h3 className="font-bold text-lg">{address.alias}</h3>
-          <p className="text-sm">{address.firstName} {address.lastName}</p>
+          <p className="text-sm">
+            {address.firstName} {address.lastName}
+          </p>
           <p className="text-sm text-gray-600">
             {address.address}, {address.city}
           </p>

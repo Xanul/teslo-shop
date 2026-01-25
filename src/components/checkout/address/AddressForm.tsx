@@ -1,25 +1,15 @@
 "use client";
 
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Country, UserAddress } from "@/interfaces";
-import { useAddressStore } from "@/store";
 import { createUserAddress, updateUserAddress } from "@/actions";
 import { toast } from "sonner";
 import { Button } from "@/components";
+import { addressSchema, AddressFormValues } from "@/schemas";
 
-type FormValues = {
-  alias: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  address2?: string;
-  postalCode: string;
-  city: string;
-  state: string;
-  country: string;
-  phone: string;
-};
+// Tipo FormValues ahora se infiere del schema de Zod (AddressFormValues)
 
 interface AddressFormProps {
   countries: Country[];
@@ -30,8 +20,6 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
   const queryParams = useSearchParams();
   const callbackURL = queryParams.get("callbackUrl") || "/profile/addresses";
   const router = useRouter();
-  // const setAddressToLocal = useAddressStore((state) => state.setAddress);
-  const localAddress = useAddressStore((state) => state.address);
 
   // Configuración de react-hook-form para el manejo del formulario
   const {
@@ -39,8 +27,8 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
     register,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<FormValues>({
-    mode: "onChange", // Validación en tiempo real al cambiar los campos
+  } = useForm<AddressFormValues>({
+    resolver: zodResolver(addressSchema), // Validación con Zod
     defaultValues: address
       ? {
           // Edit mode - pre-fill with existing data
@@ -60,7 +48,7 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
         },
   });
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit: SubmitHandler<AddressFormValues> = async (data) => {
     try {
       if (address) {
         // Edit mode - update existing address
@@ -84,8 +72,9 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
         }
       }
     } catch (error) {
+      console.log(error);
       toast.error(
-        address ? "Error updating address" : "Error creating address"
+        address ? "Error updating address" : "Error creating address",
       );
     }
   };
@@ -114,7 +103,7 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
               type="text"
               placeholder="Enter an address alias (e.g., Home, Work)"
               className="px-3 py-2.5 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400"
-              {...register("alias", { required: "The alias is required" })}
+              {...register("alias")}
             />
             {errors.alias && (
               <span className="text-xs text-red-600 mt-1">
@@ -136,7 +125,7 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
               type="text"
               placeholder="Enter your name"
               className="px-3 py-2.5 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400"
-              {...register("firstName", { required: "The name is required" })}
+              {...register("firstName")}
             />
             {errors.firstName && (
               <span className="text-xs text-red-600 mt-1">
@@ -158,9 +147,7 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
               type="text"
               placeholder="Enter your last name"
               className="px-3 py-2.5 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400"
-              {...register("lastName", {
-                required: "The last name is required",
-              })}
+              {...register("lastName")}
             />
             {errors.lastName && (
               <span className="text-xs text-red-600 mt-1">
@@ -182,9 +169,7 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
               type="tel"
               placeholder="+34 123 456 789"
               className="px-3 py-2.5 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400"
-              {...register("phone", {
-                required: "The phone number is required",
-              })}
+              {...register("phone")}
             />
             {errors.phone && (
               <span className="text-xs text-red-600 mt-1">
@@ -214,9 +199,7 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
               type="text"
               placeholder="Street, number, floor, door..."
               className="px-3 py-2.5 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400"
-              {...register("address", {
-                required: "The address is required",
-              })}
+              {...register("address")}
             />
             {errors.address && (
               <span className="text-xs text-red-600 mt-1">
@@ -256,9 +239,7 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
               type="text"
               placeholder="28001"
               className="px-3 py-2.5 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400"
-              {...register("postalCode", {
-                required: "The postal code is required",
-              })}
+              {...register("postalCode")}
             />
             {errors.postalCode && (
               <span className="text-xs text-red-600 mt-1">
@@ -278,7 +259,7 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
             <select
               id="country"
               className="px-3 py-2.5 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 cursor-pointer"
-              {...register("country", { required: "The country is required" })}
+              {...register("country")}
             >
               <option value="">Select a country</option>
               {countries.map((country) => (
@@ -307,7 +288,7 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
               type="text"
               placeholder=""
               className="px-3 py-2.5 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400"
-              {...register("state", { required: "The state is required" })}
+              {...register("state")}
             />
             {errors.state && (
               <span className="text-xs text-red-600 mt-1">
@@ -326,7 +307,7 @@ export const AddressForm = ({ countries, address }: AddressFormProps) => {
               type="text"
               placeholder="Madrid"
               className="px-3 py-2.5 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400"
-              {...register("city", { required: "The city is required" })}
+              {...register("city")}
             />
             {errors.city && (
               <span className="text-xs text-red-600 mt-1">

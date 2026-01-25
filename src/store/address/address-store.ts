@@ -12,7 +12,7 @@ interface AddressState {
 
 export const useAddressStore = create<AddressState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       address: {
         address: "",
         address2: "",
@@ -37,13 +37,12 @@ export const useAddressStore = create<AddressState>()(
       },
       selectedAddressId: null,
       setSelectedAddressId: (id: string | null) => {
-        set({ selectedAddressId: id })
+        set({ selectedAddressId: id });
       },
       clearSelectedAddressId: () => {
-        set({ selectedAddressId: null })
+        set({ selectedAddressId: null });
       },
-
     }),
-    { name: "address-store" }
-  )
+    { name: "address-store" },
+  ),
 );

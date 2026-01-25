@@ -37,7 +37,7 @@ export const ProductForm = ({ product, categories = [] }: ProductFormProps) => {
   const {
     handleSubmit,
     register,
-    formState: { isValid, errors },
+    formState: { errors },
     setValue,
     watch,
   } = useForm<ProductFormData>({

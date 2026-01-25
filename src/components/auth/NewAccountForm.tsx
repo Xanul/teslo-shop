@@ -4,15 +4,13 @@ import { FiMail, FiLock, FiUser, FiEye, FiAlertCircle } from "react-icons/fi";
 import { MdOutlineArrowForward } from "react-icons/md";
 import { titleFont } from "@/config/fonts";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  registerFormSchema,
+  type RegisterFormSchema,
+} from "@/schemas/user.schema";
 import { registerUser, login } from "@/actions";
 import { Button, LinkButton } from "@/components";
-
-type FormValues = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
 
 export function NewAccountForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,9 +19,9 @@ export function NewAccountForm() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<RegisterFormSchema>({
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -32,7 +30,7 @@ export function NewAccountForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit: SubmitHandler<RegisterFormSchema> = async (data) => {
     setErrorMessage("");
 
     const result = await registerUser(data);
@@ -42,8 +40,6 @@ export function NewAccountForm() {
 
     window.location.replace("/");
   };
-
-  const passwordValue = watch("password", "");
 
   return (
     <div className="w-full max-w-md">
@@ -104,13 +100,7 @@ export function NewAccountForm() {
                   className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 transition-colors"
                   autoComplete="given-name"
                   aria-invalid={errors.name ? "true" : "false"}
-                  {...register("name", {
-                    required: "Name is required",
-                    minLength: {
-                      value: 2,
-                      message: "Name must have at least 2 characters",
-                    },
-                  })}
+                  {...register("name")}
                 />
               </div>
               {errors.name && (
@@ -140,13 +130,7 @@ export function NewAccountForm() {
                 className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 transition-colors"
                 autoComplete="email"
                 aria-invalid={errors.email ? "true" : "false"}
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Enter a valid email address",
-                  },
-                })}
+                {...register("email")}
               />
             </div>
             {errors.email && (
@@ -175,24 +159,7 @@ export function NewAccountForm() {
                 className="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 transition-colors"
                 autoComplete="new-password"
                 aria-invalid={errors.password ? "true" : "false"}
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 8,
-                    message:
-                      "At least 8 characters with uppercase, lowercase, and numbers",
-                  },
-                  validate: {
-                    hasUppercase: (value) =>
-                      /[A-Z]/.test(value) ||
-                      "Include at least one uppercase letter",
-                    hasLowercase: (value) =>
-                      /[a-z]/.test(value) ||
-                      "Include at least one lowercase letter",
-                    hasNumber: (value) =>
-                      /\d/.test(value) || "Include at least one number",
-                  },
-                })}
+                {...register("password")}
               />
               <button
                 type="button"
@@ -235,11 +202,7 @@ export function NewAccountForm() {
                 className="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 transition-colors"
                 autoComplete="new-password"
                 aria-invalid={errors.confirmPassword ? "true" : "false"}
-                {...register("confirmPassword", {
-                  required: "Please confirm your password",
-                  validate: (value) =>
-                    value === passwordValue || "Passwords do not match",
-                })}
+                {...register("confirmPassword")}
               />
               <button
                 type="button"

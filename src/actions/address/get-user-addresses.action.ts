@@ -21,9 +21,11 @@ export const getUserAddresses = async () => {
       addresses,
     };
   } catch (error) {
+    console.error(error);
     return {
       ok: false,
-      message: "Error fetching addresses",
+      message:
+        error instanceof Error ? error.message : "Error fetching addresses",
       addresses: [],
     };
   }

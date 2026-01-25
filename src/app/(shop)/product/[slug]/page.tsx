@@ -3,7 +3,7 @@ import { ProductSlideshow, StockLabel, AddToCart } from "@/components";
 import { titleFont } from "@/config/fonts";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/actions";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 
 interface ProductPageProps {
   params: Promise<{
@@ -11,10 +11,9 @@ interface ProductPageProps {
   }>;
 }
 
-export async function generateMetadata(
-  { params }: ProductPageProps,
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
 

@@ -44,3 +44,11 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# AI assistants and code generation tools
+.agent/
+.agents/
+.claude/
+.cursor/
+.gemini/
+CLAUDE.md

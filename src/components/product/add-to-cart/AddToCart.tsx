@@ -50,18 +50,24 @@ export const AddToCart = ({ product }: AddToCartProps) => {
   };
 
   return (
-    <div>
+    <div className="space-y-3">
       {/* Size selector */}
-      {showError && (
-        <p className="text-red-500 text-sm mt-2 fade-in">
-          Please select a size
-        </p>
-      )}
       <SizeSelector
         availableSizes={product.sizes}
         selectedSize={selectedSize}
         onSizeChange={setSelectedSize}
       />
+
+      {/* Error message */}
+      {showError && (
+        <p
+          className="text-red-600 dark:text-red-400 text-sm font-medium fade-in bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-md border border-red-200 dark:border-red-800"
+          role="alert"
+          aria-live="polite"
+        >
+          Please select a size
+        </p>
+      )}
 
       {/* Quantity selector */}
       <QuantitySelector quantity={quantity} onQuantityChange={setQuantity} />
@@ -70,11 +76,11 @@ export const AddToCart = ({ product }: AddToCartProps) => {
       <Button
         onClick={addToCart}
         disabled={isLoading}
-        className="my-2 md:my-5"
+        className="my-2 md:my-5 w-full"
         variant="primary"
         size="md"
       >
-        Add to Cart
+        {isLoading ? "Adding..." : "Add to Cart"}
       </Button>
     </div>
   );

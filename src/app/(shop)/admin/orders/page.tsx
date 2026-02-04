@@ -7,6 +7,7 @@ export default async function OrdersPage() {
   const { ok, orders } = await getPaginatedOrders();
 
   if (!ok) {
+    console.error("[Admin Orders] Failed to fetch orders");
     redirect("/admin");
   }
 

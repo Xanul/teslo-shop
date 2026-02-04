@@ -16,13 +16,14 @@ export default async function OrdersPage({ searchParams }: UserPageProps) {
   if (users?.length === 0 && currentPage > 1) redirect("/admin/users?page=1");
 
   if (!ok) {
+    console.error("[Admin Users] Failed to fetch users");
     redirect("/admin");
   }
 
   return (
     <>
-      <PageTitle title="Users Managment" />
-      <UsersTable users={users!} />
+      <PageTitle title="Users Management" />
+      <UsersTable users={users ?? []} />
       <Pagination totalPages={totalPages ?? 1} />
     </>
   );

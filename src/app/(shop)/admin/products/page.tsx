@@ -1,6 +1,7 @@
 import { PageTitle, Pagination, ProductsTable } from "@/components";
 import { getPaginatedProductsWithImages } from "@/actions";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 interface ProductsPageProps {
   searchParams: Promise<{ page?: string }>;
@@ -16,6 +17,10 @@ export default async function ProductsPage({
     page: currentPage,
     take: 10,
   });
+
+  if (products.length === 0 && currentPage > 1) {
+    redirect("/admin/products?page=1");
+  }
 
   return (
     <>
